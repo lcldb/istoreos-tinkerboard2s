@@ -56,8 +56,8 @@ jobs:
         cd openwrt
         make -j$(nproc) V=s || make -j1 V=s
 
-    - name: 7. 打包并上传生成的镜像文件
-      uses: actions/upload-artifact@v3
+    - name: 7. 打包并上传生成的镜像文件（已升级为 v4）
+      uses: actions/upload-artifact@v4
       with:
         name: iStoreOS-TinkerBoard2S-Firmware
         path: openwrt/bin/targets/rockchip/armv8/*sysupgrade.img.gz
