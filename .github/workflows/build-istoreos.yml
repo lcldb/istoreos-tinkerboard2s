@@ -21,7 +21,7 @@ jobs:
 
     - name: 3. 克隆 iStoreOS 源码并更新 Feeds
       run: |
-        git clone https://github.com/linkease/iStoreOS.git openwrt
+        git clone --depth 1 https://github.com/linkease/iStoreOS.git openwrt
         cd openwrt
         ./scripts/feeds update -a
         ./scripts/feeds install -a
@@ -56,7 +56,7 @@ jobs:
         cd openwrt
         make -j$(nproc) V=s || make -j1 V=s
 
-    - name: 7. 打包并上传生成的镜像文件（已升级为 v4）
+    - name: 7. 打包并上传生成的镜像文件
       uses: actions/upload-artifact@v4
       with:
         name: iStoreOS-TinkerBoard2S-Firmware
