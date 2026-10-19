@@ -21,17 +21,26 @@ jobs:
 
     - name: 3. 克隆 iStoreOS 源码并更新 Feeds
       run: |
-        git clone --depth 1 https://github.com/linkease/iStoreOS.git openwrt
+        for i in {1..3}; do
+          echo "正在尝试第 $i 次克隆 iStoreOS 源码..."
+          git clone --depth 1 https://github.com/istoreos/istoreos.git openwrt && break
+          echo "克隆失败，5秒后重试..."
+          sleep 5
+        done
+        
+        if [ ! -d "openwrt" ]; then
+          echo "错误: 连续 3 次克隆 iStoreOS 失败"
+          exit 1
+        fi
+        
         cd openwrt
         ./scripts/feeds update -a
         ./scripts/feeds install -a
 
     - name: 4. 注入 DTS 设备树与设备定义
       run: |
-        # 复制上传的 DTS 文件到源码目录
         cp -r files/* openwrt/target/linux/rockchip/files/
         
-        # 在 armv8.mk 中追加 Tinker Board 2S 设备构建规则
         cat << 'EOF' >> openwrt/target/linux/rockchip/image/armv8.mk
 
         define Device/asus_tinker-board-2
